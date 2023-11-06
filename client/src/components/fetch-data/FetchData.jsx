@@ -9,9 +9,8 @@ const FetchData = () => {
 };
 
 const fetchData = async () => {
-    const response = await fetch('http://localhost:3000',{
+    const response = await fetch(`http://localhost:3000/`,{
         method: 'POST'
-
     });
     const data = await response.json();
     console.log(data);
