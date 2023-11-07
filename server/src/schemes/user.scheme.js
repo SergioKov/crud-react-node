@@ -16,7 +16,10 @@ const userScheme = new mongoose.Schema(
             unique: true,
         },
     },
-    { collection: 'mi_colleccion' }
+    {
+        collection: 'mi_colleccion',
+        timestamps: true,
+    }
 );
 
 const UserModel = mongoose.model('UserModel', userScheme);
