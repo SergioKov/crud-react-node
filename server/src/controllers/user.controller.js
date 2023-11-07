@@ -1,5 +1,6 @@
 const { log } = require('console');
 const UserModel = require('../schemes/user.scheme');
+const bcrypt = require('bcrypt');
 
 const controller = {};
 
@@ -68,9 +69,14 @@ controller.getUserByEmailAndUsername = async (req, res) => {
 
 controller.createUser = async (req, res) => {
     const { username, password, email } = req.body;
+
+    //Generar un hash de la contraseña
+    const saltRounds = 10; // numero de rondas de sal para la encriptacion
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     const newUser = new UserModel({
         username,
-        password,
+        password: hashedPassword,
         email,
     });
 
@@ -129,49 +135,5 @@ controller.deleteUser = async (req, res) => {
         console.log('Error: ', error);
     }
 };
-
-// controller.updateUser = async (req, res) => {
-//     try {
-//         const data = await fsPromises.readFile(filePath);
-//         const jsonData = await JSON.parse(data);
-
-//         console.log('jsonData: ');
-//         console.log(jsonData);
-
-//         const userIndex = jsonData.findIndex(user => user.userId === req.params.userId);
-
-//         jsonData[userIndex] = { ...jsonData[userIndex], ...req.body }; //se actualiza el usuario
-
-//         await fsPromises.writeFile(filePath, JSON.stringify(jsonData));
-
-//         console.log('jsonData: ');
-//         console.log(jsonData);
-
-//         res.send(jsonData);
-//     } catch (error) {
-//         res.send({ error: error });
-//     }
-
-//     res.end();
-// };
-
-// controller.deleteUser = async (req, res) => {
-//     try {
-//         const data = await fsPromises.readFile(filePath);
-//         const jsonData = await JSON.parse(data);
-//         console.log('jsonData: ');
-//         console.log(jsonData);
-
-//         const filteredData = jsonData.filter(v => v.userId !== req.params.userId); //devuelve un array
-//         console.log('ahora jsonData: ', filteredData);
-
-//         await fsPromises.writeFile(filePath, JSON.stringify(filteredData));
-//         res.send(filteredData);
-//     } catch (error) {
-//         res.send({ error: error });
-//     }
-
-//     res.end();
-// };
 
 module.exports = controller;
